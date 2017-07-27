@@ -2,6 +2,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Created by yzhao on 7/27/17.
@@ -21,8 +22,8 @@ public class Main {
 
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("js");
-        Object result = engine.eval(preprocess("1+[1001]+3*[1002]+5", originalMap));
-        System.out.println(result.toString());
+        Object result = engine.eval(preprocess("1+[1001]+((3*[1002])/2+5)", originalMap)); // 14.0
+        System.out.println(Double.valueOf(result.toString()));  // 14.0
     }
 
     public static String preprocess(String expression, Map<String, String> originalMap){
@@ -54,6 +55,18 @@ public class Main {
 
         return sb.toString();
     }
+
+    /*public static boolean isValidParentheses(char[] str, Map<Character, Character> validPairs){
+        Stack<Character> stack = new Stack<Character>();
+
+        int n = str.length;
+        int i = 0;
+        while(i < n){
+
+
+        }
+    }*/
+
 }
 
 
