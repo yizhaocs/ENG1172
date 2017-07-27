@@ -6,26 +6,34 @@ import java.util.Map;
  */
 public class Main {
     public static void main(String[] args){
-        preprocess("1+[2]");
+        Map<String, String> originalMap = new HashMap<String, String>();
+        originalMap.put("1001", "2");
+
+        System.out.println(preprocess("1+[1001]+3", originalMap));
 
     }
 
-    public static String preprocess(String input){
+    public static String preprocess(String input, Map<String, String> originalMap){
         int n = input.length();
         char[] str = input.toCharArray();
 
         StringBuilder sb = new StringBuilder();
-        Map<String, String> originalMap = new HashMap<String, String>();
-        originalMap.put("1001", "2");
-
 
         int p_1 = 0;
         int p_2 = 0;
-        while(p_1 < n && p_2 < n){
+        while(p_1 != -1 && p_2 != -1){
             p_1 = findNext(str, '[', p_2 + 1);
+            if(p_1 == -1){
+                break;
+            }
+            sb.append(input.substring(p_2, p_1));
             p_2 = findNext(str, ']', p_1 + 1);
-            System.out.println("p_1:" + p_1 + "  ,p_2:" + p_2);
+            String key = input.substring(p_1 + 1, p_2);
+            if(key != null && originalMap.containsKey(key)){
+                sb.append(originalMap.get(key));
+            }
 
+            System.out.println("p_1:" + p_1 + "  ,p_2:" + p_2);
             //sb.append(input.substring())
             //originalMap.containsKey()
         }
