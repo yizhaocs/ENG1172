@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.Stack;
 
 /**
- * The expression string may contain open ( and closing parentheses ), the plus + or minus sign - or multiplication sign * or division sign /, non-negative integers and empty spaces .
+ * The expression string may contain decimal digit, open ( and closing parentheses ), the plus + or minus sign - or multiplication sign * or division sign /, non-negative integers and empty spaces .
  */
 public class Calculator {
     public static void main(String[] args){
