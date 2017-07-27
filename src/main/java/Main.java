@@ -8,8 +8,12 @@ public class Main {
     public static void main(String[] args){
         Map<String, String> originalMap = new HashMap<String, String>();
         originalMap.put("1001", "2");
+        originalMap.put("1002", "4");
 
-        System.out.println(preprocess("1+[1001]+3", originalMap));
+        System.out.println(preprocess("1", originalMap)); // 1
+        System.out.println(preprocess("1+[1001]", originalMap)); // 1+2
+        System.out.println(preprocess("1+[1001]+3", originalMap)); // 1+2+3
+        System.out.println(preprocess("1+[1001]+3*[1002]+5", originalMap)); // 1+2+3*4+5
 
     }
 
@@ -19,23 +23,25 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
 
-        int p_1 = 0;
-        int p_2 = 0;
-        while(p_1 != -1 && p_2 != -1){
-            p_1 = findNext(str, '[', p_2 + 1);
-            if(p_1 == -1){
+        int startPosition = 0;
+        int previousStopPosition = 0;
+        while(startPosition < n){
+            IntervalPair mIntervalPair = findNextInterval(str, '[', ']', startPosition);
+            int left = mIntervalPair.getLeftPosition();
+            int right = mIntervalPair.getRightPosition();
+
+           // System.out.println("left:" + left + "  ,right:" + right);
+            if(right >= n){
+                sb.append(input.substring(startPosition + 1, n));
                 break;
             }
-            sb.append(input.substring(p_2, p_1));
-            p_2 = findNext(str, ']', p_1 + 1);
-            String key = input.substring(p_1 + 1, p_2);
+            sb.append(input.substring(startPosition, left));
+            String key = input.substring(left + 1, right);
+           // System.out.println("key:" + key);
             if(key != null && originalMap.containsKey(key)){
                 sb.append(originalMap.get(key));
             }
-
-            System.out.println("p_1:" + p_1 + "  ,p_2:" + p_2);
-            //sb.append(input.substring())
-            //originalMap.containsKey()
+            startPosition = right;
         }
 
 
@@ -44,12 +50,24 @@ public class Main {
 
     }
 
-    private static int findNext(char[] str, char target, int startPosition){
-        for(int i = startPosition; i < str.length; i++){
-            if(str[i] == target){
-                return i;
+    private static IntervalPair findNextInterval(char[] str, char leftTarget, char rightTarget, int startPosition){
+        int leftPosition = startPosition;
+        while(leftPosition < str.length){
+            if(str[leftPosition] == leftTarget){
+                break;
             }
+            leftPosition++;
         }
-        return -1;
+
+        int rightPosition = startPosition + 1;
+        while(rightPosition < str.length){
+            if(str[rightPosition] == rightTarget){
+                break;
+            }
+            rightPosition++;
+        }
+        return new IntervalPair(leftPosition, rightPosition);
     }
 }
+
+
