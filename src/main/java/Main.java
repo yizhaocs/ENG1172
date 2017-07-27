@@ -1,3 +1,5 @@
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -5,7 +7,7 @@ import java.util.Map;
  * Created by yzhao on 7/27/17.
  */
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception{
         Map<String, String> originalMap = new HashMap<String, String>();
         originalMap.put("1001", "2");
         originalMap.put("1002", "4");
@@ -16,6 +18,11 @@ public class Main {
         System.out.println(preprocess("1+[1001]+3", originalMap)); // 1+2+3
         System.out.println(preprocess("1+[1001]+3*[1002]+5", originalMap)); // 1+2+3*4+5
 
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("js");
+        Object result = engine.eval(preprocess("1+[1001]+3*[1002]+5", originalMap));
+        System.out.println(result.toString());
     }
 
     public static String preprocess(String expression, Map<String, String> originalMap){
