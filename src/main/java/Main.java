@@ -18,56 +18,34 @@ public class Main {
 
     }
 
-    public static String preprocess(String input, Map<String, String> originalMap){
-        int n = input.length();
-        char[] str = input.toCharArray();
+    public static String preprocess(String expression, Map<String, String> originalMap){
+        int n = expression.length();
+        char[] str = expression.toCharArray();
 
         StringBuilder sb = new StringBuilder();
 
         int startPosition = 0;
         while(startPosition < n){
-            IntervalPair mIntervalPair = findNextInterval(str, '[', ']', startPosition);
+            IntervalPair mIntervalPair = FindInterval.findNextInterval(str, '[', ']', startPosition);
             int left = mIntervalPair.getLeftPosition();
             int right = mIntervalPair.getRightPosition();
 
             // append the substring that is not part
             if(right >= n){
-                sb.append(input.substring(startPosition, n));
+                sb.append(expression.substring(startPosition, n));
                 break;
             }
 
             // append the substring that is part
-            sb.append(input.substring(startPosition, left));
-            String key = input.substring(left + 1, right);
+            sb.append(expression.substring(startPosition, left));
+            String key = expression.substring(left + 1, right);
             if(key != null && originalMap.containsKey(key)){
                 sb.append(originalMap.get(key));
             }
             startPosition = right + 1;
         }
 
-
         return sb.toString();
-
-
-    }
-
-    private static IntervalPair findNextInterval(char[] str, char leftTarget, char rightTarget, int startPosition){
-        int leftPosition = startPosition;
-        while(leftPosition < str.length){
-            if(str[leftPosition] == leftTarget){
-                break;
-            }
-            leftPosition++;
-        }
-
-        int rightPosition = startPosition + 1;
-        while(rightPosition < str.length){
-            if(str[rightPosition] == rightTarget){
-                break;
-            }
-            rightPosition++;
-        }
-        return new IntervalPair(leftPosition, rightPosition);
     }
 }
 
